@@ -906,7 +906,7 @@ export type Database = {
         | "in_progress"
         | "complete"
         | "dismissed"
-      swap_status: "pending" | "accepted" | "declined"
+      swap_status: "pending" | "accepted" | "declined" | "cancelled" | "expired"
       time_slot: "AM" | "PM" | "ALL_DAY"
       user_role:
         | "fellow"
@@ -1064,7 +1064,7 @@ export const Constants = {
         "complete",
         "dismissed",
       ],
-      swap_status: ["pending", "accepted", "declined"],
+      swap_status: ["pending", "accepted", "declined", "cancelled", "expired"],
       time_slot: ["AM", "PM", "ALL_DAY"],
       user_role: [
         "fellow",

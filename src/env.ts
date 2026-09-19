@@ -10,6 +10,11 @@ export const env = createEnv({
     ANTHROPIC_API_KEY: z.string().min(1),
     MCP_OAUTH_ISSUER: z.string().url().optional(),
     SERVER_URL: z.string().url().optional(),
+    RESEND_API_KEY: z.string().min(1).optional(),
+    RESEND_FROM_EMAIL: z
+      .string()
+      .min(1)
+      .default('ED Portal <notifications@ed-portal.local>'),
   },
 
   /**
