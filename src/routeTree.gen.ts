@@ -32,6 +32,7 @@ import { Route as AuthenticatedAdminFellowsRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminImportRouteImport } from './routes/_authenticated/admin/import'
 import { Route as AuthenticatedAdminLeaveRouteImport } from './routes/_authenticated/admin/leave'
 import { Route as AuthenticatedAdminQualityRouteImport } from './routes/_authenticated/admin/quality'
+import { Route as AuthenticatedAdminReflectionsRouteImport } from './routes/_authenticated/admin/reflections'
 import { Route as AuthenticatedAdminRoomsRouteImport } from './routes/_authenticated/admin/rooms'
 import { Route as AuthenticatedAdminSwapsRouteImport } from './routes/_authenticated/admin/swaps'
 import { Route as AuthenticatedAdminTeachingRouteImport } from './routes/_authenticated/admin/teaching'
@@ -162,6 +163,12 @@ const AuthenticatedAdminQualityRoute =
     path: '/quality',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminReflectionsRoute =
+  AuthenticatedAdminReflectionsRouteImport.update({
+    id: '/reflections',
+    path: '/reflections',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminRoomsRoute = AuthenticatedAdminRoomsRouteImport.update({
   id: '/rooms',
   path: '/rooms',
@@ -230,6 +237,7 @@ export interface FileRoutesByFullPath {
   '/admin/import': typeof AuthenticatedAdminImportRoute
   '/admin/leave': typeof AuthenticatedAdminLeaveRouteWithChildren
   '/admin/quality': typeof AuthenticatedAdminQualityRoute
+  '/admin/reflections': typeof AuthenticatedAdminReflectionsRoute
   '/admin/rooms': typeof AuthenticatedAdminRoomsRoute
   '/admin/swaps': typeof AuthenticatedAdminSwapsRoute
   '/admin/teaching': typeof AuthenticatedAdminTeachingRoute
@@ -260,6 +268,7 @@ export interface FileRoutesByTo {
   '/admin/fellows': typeof AuthenticatedAdminFellowsRoute
   '/admin/import': typeof AuthenticatedAdminImportRoute
   '/admin/quality': typeof AuthenticatedAdminQualityRoute
+  '/admin/reflections': typeof AuthenticatedAdminReflectionsRoute
   '/admin/rooms': typeof AuthenticatedAdminRoomsRoute
   '/admin/swaps': typeof AuthenticatedAdminSwapsRoute
   '/admin/teaching': typeof AuthenticatedAdminTeachingRoute
@@ -294,6 +303,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/import': typeof AuthenticatedAdminImportRoute
   '/_authenticated/admin/leave': typeof AuthenticatedAdminLeaveRouteWithChildren
   '/_authenticated/admin/quality': typeof AuthenticatedAdminQualityRoute
+  '/_authenticated/admin/reflections': typeof AuthenticatedAdminReflectionsRoute
   '/_authenticated/admin/rooms': typeof AuthenticatedAdminRoomsRoute
   '/_authenticated/admin/swaps': typeof AuthenticatedAdminSwapsRoute
   '/_authenticated/admin/teaching': typeof AuthenticatedAdminTeachingRoute
@@ -328,6 +338,7 @@ export interface FileRouteTypes {
     | '/admin/import'
     | '/admin/leave'
     | '/admin/quality'
+    | '/admin/reflections'
     | '/admin/rooms'
     | '/admin/swaps'
     | '/admin/teaching'
@@ -358,6 +369,7 @@ export interface FileRouteTypes {
     | '/admin/fellows'
     | '/admin/import'
     | '/admin/quality'
+    | '/admin/reflections'
     | '/admin/rooms'
     | '/admin/swaps'
     | '/admin/teaching'
@@ -391,6 +403,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/import'
     | '/_authenticated/admin/leave'
     | '/_authenticated/admin/quality'
+    | '/_authenticated/admin/reflections'
     | '/_authenticated/admin/rooms'
     | '/_authenticated/admin/swaps'
     | '/_authenticated/admin/teaching'
@@ -576,6 +589,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminQualityRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/reflections': {
+      id: '/_authenticated/admin/reflections'
+      path: '/reflections'
+      fullPath: '/admin/reflections'
+      preLoaderRoute: typeof AuthenticatedAdminReflectionsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/rooms': {
       id: '/_authenticated/admin/rooms'
       path: '/rooms'
@@ -664,6 +684,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminImportRoute: typeof AuthenticatedAdminImportRoute
   AuthenticatedAdminLeaveRoute: typeof AuthenticatedAdminLeaveRouteWithChildren
   AuthenticatedAdminQualityRoute: typeof AuthenticatedAdminQualityRoute
+  AuthenticatedAdminReflectionsRoute: typeof AuthenticatedAdminReflectionsRoute
   AuthenticatedAdminRoomsRoute: typeof AuthenticatedAdminRoomsRoute
   AuthenticatedAdminSwapsRoute: typeof AuthenticatedAdminSwapsRoute
   AuthenticatedAdminTeachingRoute: typeof AuthenticatedAdminTeachingRoute
@@ -677,6 +698,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminImportRoute: AuthenticatedAdminImportRoute,
   AuthenticatedAdminLeaveRoute: AuthenticatedAdminLeaveRouteWithChildren,
   AuthenticatedAdminQualityRoute: AuthenticatedAdminQualityRoute,
+  AuthenticatedAdminReflectionsRoute: AuthenticatedAdminReflectionsRoute,
   AuthenticatedAdminRoomsRoute: AuthenticatedAdminRoomsRoute,
   AuthenticatedAdminSwapsRoute: AuthenticatedAdminSwapsRoute,
   AuthenticatedAdminTeachingRoute: AuthenticatedAdminTeachingRoute,

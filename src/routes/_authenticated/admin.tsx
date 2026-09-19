@@ -1,4 +1,10 @@
-import { Link, Outlet, createFileRoute, redirect, useRouterState } from '@tanstack/react-router'
+import {
+  Link,
+  Outlet,
+  createFileRoute,
+  redirect,
+  useRouterState,
+} from '@tanstack/react-router'
 
 import { isStaff } from '#/lib/types'
 
@@ -18,6 +24,7 @@ const tabs = [
   { to: '/admin/rooms', label: 'Rooms' },
   { to: '/admin/leave', label: 'Leave' },
   { to: '/admin/swaps', label: 'Swaps' },
+  { to: '/admin/reflections', label: 'Reflections' },
   { to: '/admin/quality', label: 'Quality' },
   { to: '/admin/import', label: 'Import' },
 ] as const
@@ -31,7 +38,9 @@ function AdminLayout() {
       <nav className="mb-6 flex flex-wrap gap-1 border-b">
         {tabs.map((tab) => {
           const active =
-            tab.to === '/admin' ? pathname === '/admin' : pathname.startsWith(tab.to)
+            tab.to === '/admin'
+              ? pathname === '/admin'
+              : pathname.startsWith(tab.to)
           return (
             <Link
               key={tab.to}
