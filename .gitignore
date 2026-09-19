@@ -11,3 +11,6 @@ dist-ssr
 .vinxi
 __unconfig*
 todos.json
+
+# Contains real fellow names, NHS emails and phone numbers.
+ed-portal-full.sql
