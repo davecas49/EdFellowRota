@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { getWebRequest } from '@tanstack/react-start/server'
+import { getRequest } from '@tanstack/react-start/server'
 import { z } from 'zod'
 
 import { createSupabaseAdminClient } from '#/lib/supabase/server'
@@ -33,7 +33,7 @@ function json(data: unknown, status = 200) {
 }
 
 async function handleGet(): Promise<Response> {
-  const request = getWebRequest()
+  const request = getRequest()
   const url = new URL(request.url)
   const token = url.searchParams.get('token')
 
@@ -92,7 +92,7 @@ async function handleGet(): Promise<Response> {
   return json({
     sessionLabel: entry?.activity_label ?? '',
     sessionDate: entry?.entry_date ?? '',
-    fellowName: entry?.profiles?.name ?? '',
+    fellowName: entry?.profiles.name ?? '',
     guestName: invite.guest_name,
     guestEmail: invite.guest_email,
     guestRole: invite.guest_role,
@@ -100,7 +100,7 @@ async function handleGet(): Promise<Response> {
 }
 
 async function handlePost(): Promise<Response> {
-  const request = getWebRequest()
+  const request = getRequest()
 
   let body: unknown
   try {
