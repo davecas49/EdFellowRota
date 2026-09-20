@@ -85,7 +85,9 @@ export const getAdminOverview = createServerFn({ method: 'GET' }).handler(
       getAllSwaps(),
       admin
         .from('leave_dates')
-        .select('id, leave_type, leave_date, profiles(name)')
+        .select(
+          'id, leave_type, leave_date, fellow:profiles!leave_dates_fellow_id_fkey(name)',
+        )
         .eq('status', 'pending')
         .order('leave_date')
         .returns<
@@ -93,7 +95,7 @@ export const getAdminOverview = createServerFn({ method: 'GET' }).handler(
             id: string
             leave_type: string
             leave_date: string
-            profiles: { name: string } | null
+            fellow: { name: string } | null
           }>
         >(),
       admin
@@ -237,7 +239,7 @@ export const getAdminOverview = createServerFn({ method: 'GET' }).handler(
       },
       pending: {
         leave: pendingLeave.map((l) => ({
-          fellowName: l.profiles?.name ?? 'Unknown',
+          fellowName: l.fellow?.name ?? 'Unknown',
           leaveType: l.leave_type,
           leaveDate: l.leave_date,
         })),
