@@ -9,11 +9,10 @@ import type { Profile } from '#/lib/types'
 
 /**
  * No open sign-ups: an account can only be activated if the email is
- * already on file as a fellow, lead fellow, coordinator, administrator, or
- * faculty contact (spec.md §2). A faculty-only match provisions a `profiles`
- * row on the spot so the rest of the app has a single identity table to
- * check against; `link_profile_to_auth_user` (see the auth-linking
- * migration) then attaches `user_id` once Supabase confirms the sign-in.
+ * already on file in `profiles` as a fellow, lead fellow, coordinator,
+ * administrator, or faculty member (spec.md §2). `link_profile_to_auth_user`
+ * (see the auth-linking migration) attaches `user_id` once Supabase confirms
+ * the sign-in.
  */
 async function resolveEligibleProfile(email: string) {
   const supabase = createSupabaseAdminClient()
@@ -26,47 +25,45 @@ async function resolveEligibleProfile(email: string) {
     .eq('is_active', true)
     .maybeSingle()
 
-  if (existingProfile) return true
-
-  const { data: contact } = await supabase
-    .from('faculty_contacts')
-    .select('name, email')
-    .ilike('email', normalized)
-    .eq('is_active', true)
-    .maybeSingle()
-
-  if (!contact?.email) return false
-
-  const initials = contact.name
-    .split(/\s+/)
-    .map((part: string) => part[0])
-    .join('')
-    .slice(0, 3)
-    .toUpperCase()
-
-  const { error } = await supabase.from('profiles').insert({
-    name: contact.name,
-    email: contact.email,
-    role: 'faculty',
-    initials,
-    is_active: true,
-  })
-
-  // A profiles row may already exist for this email (race, or re-invite);
-  // that's fine, it just means eligibility already holds.
-  if (error && error.code !== '23505') throw error
-
-  return true
+  return !!existingProfile
 }
 
 /**
- * First-time activation and "forgot password" are the same operation: send
- * a code that lets the person set a password. `inviteUserByEmail`
+ * Send a code that lets the person set a password. `inviteUserByEmail`
  * covers a brand-new auth user; if one already exists we fall back to the
  * standard recovery email. The caller needs to know which of the two was
  * sent, since that determines the `type` passed to `verifyOtp()` on the
- * /reset-password step.
+ * /reset-password step. Shared by the self-service /forgot-password flow
+ * and the admin "add person" / "resend invite" actions in people.functions.ts.
  */
+export async function sendAccountInvite(email: string) {
+  const supabase = createSupabaseAdminClient()
+
+  const { error: inviteError } = await supabase.auth.admin.inviteUserByEmail(email)
+
+  if (!inviteError) {
+    return {
+      sent: true as const,
+      kind: 'invite' as const,
+      message: 'Check your email for a code to activate your account.',
+    }
+  }
+
+  if (!/already.*registered/i.test(inviteError.message)) {
+    throw inviteError
+  }
+
+  const { error: resetError } = await supabase.auth.resetPasswordForEmail(email)
+  if (resetError) throw resetError
+
+  return {
+    sent: true as const,
+    kind: 'recovery' as const,
+    message: 'Check your email for a code to reset your password.',
+  }
+}
+
+/** First-time activation and "forgot password" are the same operation (see `sendAccountInvite`). */
 export const requestAccountAccess = createServerFn({ method: 'POST' })
   .validator(z.object({ email: z.string().email() }))
   .handler(async ({ data }) => {
@@ -79,30 +76,7 @@ export const requestAccountAccess = createServerFn({ method: 'POST' })
       }
     }
 
-    const supabase = createSupabaseAdminClient()
-
-    const { error: inviteError } = await supabase.auth.admin.inviteUserByEmail(data.email)
-
-    if (!inviteError) {
-      return {
-        sent: true as const,
-        kind: 'invite' as const,
-        message: 'Check your email for a code to activate your account.',
-      }
-    }
-
-    if (!/already.*registered/i.test(inviteError.message)) {
-      throw inviteError
-    }
-
-    const { error: resetError } = await supabase.auth.resetPasswordForEmail(data.email)
-    if (resetError) throw resetError
-
-    return {
-      sent: true as const,
-      kind: 'recovery' as const,
-      message: 'Check your email for a code to reset your password.',
-    }
+    return sendAccountInvite(data.email)
   })
 
 export const signInWithPassword = createServerFn({ method: 'POST' })

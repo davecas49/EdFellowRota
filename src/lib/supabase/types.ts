@@ -138,42 +138,6 @@ export type Database = {
           },
         ]
       }
-      faculty_contacts: {
-        Row: {
-          created_at: string
-          department: string
-          email: string | null
-          id: string
-          is_active: boolean
-          name: string
-          phone: string | null
-          responsibilities: string | null
-          role_title: string | null
-        }
-        Insert: {
-          created_at?: string
-          department: string
-          email?: string | null
-          id?: string
-          is_active?: boolean
-          name: string
-          phone?: string | null
-          responsibilities?: string | null
-          role_title?: string | null
-        }
-        Update: {
-          created_at?: string
-          department?: string
-          email?: string | null
-          id?: string
-          is_active?: boolean
-          name?: string
-          phone?: string | null
-          responsibilities?: string | null
-          role_title?: string | null
-        }
-        Relationships: []
-      }
       guest_feedback_invites: {
         Row: {
           created_at: string
@@ -424,39 +388,48 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string
+          department: string | null
           email: string
           id: string
           initials: string
           is_active: boolean
           name: string
           phone: string | null
+          responsibilities: string | null
           role: Database["public"]["Enums"]["user_role"]
+          role_title: string | null
           tier: Database["public"]["Enums"]["fellow_tier"] | null
           updated_at: string
           user_id: string | null
         }
         Insert: {
           created_at?: string
+          department?: string | null
           email: string
           id?: string
           initials: string
           is_active?: boolean
           name: string
           phone?: string | null
+          responsibilities?: string | null
           role: Database["public"]["Enums"]["user_role"]
+          role_title?: string | null
           tier?: Database["public"]["Enums"]["fellow_tier"] | null
           updated_at?: string
           user_id?: string | null
         }
         Update: {
           created_at?: string
+          department?: string | null
           email?: string
           id?: string
           initials?: string
           is_active?: boolean
           name?: string
           phone?: string | null
+          responsibilities?: string | null
           role?: Database["public"]["Enums"]["user_role"]
+          role_title?: string | null
           tier?: Database["public"]["Enums"]["fellow_tier"] | null
           updated_at?: string
           user_id?: string | null

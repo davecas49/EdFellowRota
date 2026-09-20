@@ -26,7 +26,8 @@ connection so administrators can interrogate the data conversationally.
 
 Rules in force:
 - No open sign-ups. A person can only create an account if their email is
-  already on file as a fellow, administrator, coordinator or faculty contact.
+  already on file in `profiles` as a fellow, administrator, coordinator or
+  faculty member.
 - Email verification is required on first sign-in.
 - Everyone signed in can change the rota; every change is logged and shown.
 
@@ -116,7 +117,7 @@ Preset value lists:
 
 `!` marks a required field.
 
-**profiles** (17 rows) — id uuid!, user_id uuid, name text!, email text!, role user_role!, tier fellow_tier, phone text, initials text!, is_active bool!, created_at!, updated_at!
+**profiles** (31 rows) — id uuid!, user_id uuid, name text!, email text!, role user_role!, tier fellow_tier, phone text, initials text!, role_title text, department text, responsibilities text, is_active bool!, created_at!, updated_at!
 
 **rota_entries** (2,827) — id!, fellow_id uuid!, entry_date date!, time_slot!, activity_type!, activity_label text!, notes text, imported_from_excel bool!, import_batch_id uuid, created_at!, updated_at!
 
@@ -138,8 +139,6 @@ Preset value lists:
 
 **quality_scores** — id!, subject_type quality_subject!, subject_id!, fellow_id!, criteria jsonb!, overall_score numeric!, band text!, ai_summary text!, reviewer_notes text!, model, scored_by, scored_at!, created_at!, updated_at!
 
-**faculty_contacts** (20) — id!, name text!, role_title, department text!, email, phone, responsibilities, is_active bool!, created_at!
-
 **teaching_assignments** (39) — id!, fellow_id, assignment_type text!, university, block_code, block_name, rotation_level, session_name, duration_hours numeric, notes
 
 **block_leads** — id!, block_code text!, specialty_name text!, lead_name text!, lead_email, lead_role, rotation_level text!
@@ -157,7 +156,7 @@ Every table is protected and readable only by signed-in users.
 - Peer feedback: readable by the team, insert by any signed-in user, update only by the author.
 - Leave: fellows insert their own and may cancel while pending; staff manage all.
 - Quality scores, import log: staff only.
-- Faculty, teaching, rooms, block leads, AHD: all read, staff write.
+- Teaching, rooms, block leads, AHD: all read, staff write.
 - Guest invites: own or staff; guest submissions arrive through a public token endpoint that validates the token and expiry.
 
 ---
